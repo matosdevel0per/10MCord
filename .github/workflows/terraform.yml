@@ -21,16 +21,24 @@ jobs:
       - name: Preparar Android SDK
         uses: android-actions/setup-android@v3
         with:
-          packages: 'platform-tools platforms;android-35 build-tools;35.0.0'
+          packages: 'platform-tools platforms;android-34 build-tools;34.0.0'
 
       - name: Extrair projeto
         run: |
-          unzip -q 10MCord-source-V1.0.zip -d source
+          unzip -q 10MCord-source-V1.0.zip -d .
 
-          WRAPPER=$(find source/android/installer -type f -name gradlew -print -quit)
+          echo "=== PASTAS DO PROJETO ==="
+          find . -maxdepth 5 -type d
+
+          echo "=== ARQUIVOS GRADLE ==="
+          find . -type f \( -name gradlew -o -name settings.gradle -o -name settings.gradle.kts \)
+
+      - name: Encontrar Installer
+        run: |
+          WRAPPER=$(find . -type f -name gradlew | grep '/android/installer/gradlew$' | head -n 1)
 
           if [ -z "$WRAPPER" ]; then
-            echo "Gradle do Installer não encontrado"
+            echo "Gradle do Installer não encontrado."
             exit 1
           fi
 
@@ -46,6 +54,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: 10MCord-Installer
-          path: source/android/installer/app/build/outputs/apk/debug/*.apk
+          path: ${{ env.PROJECT_DIR }}/app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
           
