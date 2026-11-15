@@ -27,7 +27,7 @@ jobs:
         run: |
           unzip -q 10MCord-source-V1.0.zip -d source
 
-          WRAPPER=$(find source/installer -name gradlew -print -quit)
+          WRAPPER=$(find source/android/installer -type f -name gradlew -print -quit)
 
           if [ -z "$WRAPPER" ]; then
             echo "Gradle do Installer não encontrado"
@@ -46,6 +46,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: 10MCord-Installer
-          path: source/installer/app/build/outputs/apk/debug/*.apk
+          path: source/android/installer/app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
           
