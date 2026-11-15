@@ -25,7 +25,7 @@ jobs:
 
       - name: Extrair projeto
         run: |
-          unzip -q 10MCord-source.zip -d source
+          unzip -q 10MCord-source-V1.0.zip -d source
 
           WRAPPER=$(find source/installer -name gradlew -print -quit)
 
