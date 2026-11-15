@@ -25,7 +25,7 @@ jobs:
 
       - name: Extrair projeto
         run: |
-          unzip -q 10MCord-source-V1.0.zip -d .
+          unzip -q 10MCord-SourceW.zip -d .
 
           echo "=== PASTAS DO PROJETO ==="
           find . -maxdepth 5 -type d
