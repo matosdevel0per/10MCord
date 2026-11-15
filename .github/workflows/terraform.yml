@@ -1,5 +1,5 @@
 
-name: Build 10MCord APK
+name: Build 10MCord Installer
 
 on:
   workflow_dispatch:
@@ -25,24 +25,27 @@ jobs:
 
       - name: Extrair projeto
         run: |
-          unzip -q 10MCord-source-V1.0.zip -d source
-          WRAPPER=$(find source -type f -name gradlew -print -quit)
+          unzip -q 10MCord-source.zip -d source
+
+          WRAPPER=$(find source/installer -name gradlew -print -quit)
+
           if [ -z "$WRAPPER" ]; then
-            echo "Gradle wrapper não encontrado"
+            echo "Gradle do Installer não encontrado"
             exit 1
           fi
+
           PROJECT_DIR=$(dirname "$WRAPPER")
           echo "PROJECT_DIR=$PROJECT_DIR" >> "$GITHUB_ENV"
           chmod +x "$WRAPPER"
 
-      - name: Compilar APK
-        run: ./gradlew assembleDebug
+      - name: Compilar Installer
+        run: ./gradlew :app:assembleDebug
         working-directory: ${{ env.PROJECT_DIR }}
 
       - name: Salvar APK
         uses: actions/upload-artifact@v4
         with:
-          name: 10MCord-APK
-          path: source/**/build/outputs/apk/**/*.apk
+          name: 10MCord-Installer
+          path: source/installer/app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
           
