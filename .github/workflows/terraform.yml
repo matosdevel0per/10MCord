@@ -1,0 +1,45 @@
+
+name: Build 10MCord APK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar projeto
+        uses: actions/checkout@v4
+
+      - name: Preparar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Preparar Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Extrair projeto
+        run: |
+          unzip -q 10MCord-source.zip -d source
+          WRAPPER=$(find source -type f -name gradlew -print -quit)
+          if [ -z "$WRAPPER" ]; then
+            echo "Gradle wrapper não encontrado"
+            exit 1
+          fi
+          PROJECT_DIR=$(dirname "$WRAPPER")
+          echo "PROJECT_DIR=$PROJECT_DIR" >> "$GITHUB_ENV"
+          chmod +x "$WRAPPER"
+
+      - name: Compilar APK
+        run: ./gradlew assembleDebug
+        working-directory: ${{ env.PROJECT_DIR }}
+
+      - name: Salvar APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: 10MCord-APK
+          path: source/**/build/outputs/apk/**/*.apk
+          
