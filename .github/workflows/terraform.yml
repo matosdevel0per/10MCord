@@ -25,7 +25,7 @@ jobs:
 
       - name: Extrair projeto
         run: |
-          unzip -q 10MCord-source.zip -d source
+          unzip -q 10M Cord V1.0.zip -d source
           WRAPPER=$(find source -type f -name gradlew -print -quit)
           if [ -z "$WRAPPER" ]; then
             echo "Gradle wrapper não encontrado"
